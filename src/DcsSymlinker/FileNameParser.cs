@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 namespace DcsSymlinker;
 
 public class FileNameParser : IFileNameParser
@@ -7,20 +9,33 @@ public class FileNameParser : IFileNameParser
         var ids = new List<string>();
         foreach (var file in files)
         {
-            var id = GetNamePart(file.Name, FileNamePart.Id);
-
-
-            ids.Add(id);
+            if (GetNamePart(file.Name, FileNamePart.Id) is {} id)
+            {
+                // Only care about unique IDs
+                if (!ids.Contains(id))
+                {
+                    ids.Add(id);
+                }
+            };
         }
 
         return ids;
+    }
+
+    public string GetDeviceName(FileInfo fileInfo)
+    {
+        return GetNamePart(fileInfo.Name, FileNamePart.DeviceName) ?? string.Empty;
     }
 
     public List<string> GetNewNames(FileInfo fileInfo, List<string> ids)
     {
         var newNames = new List<string>();
         var deviceName = GetNamePart(fileInfo.Name, FileNamePart.DeviceName);
-
+        if (deviceName is null)
+        {
+            return [];
+        }
+        
         foreach (var id in ids)
         {
             newNames.Add($"{deviceName} {{{id}}}.diff.lua");
@@ -29,14 +44,14 @@ public class FileNameParser : IFileNameParser
         return newNames;
     }
 
-    private static string GetNamePart(string name, FileNamePart part)
+    private static string? GetNamePart(string name, FileNamePart part)
     {
         var splitName = name.Split(['{', '}'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         if (splitName.Length != 3)
         {
-            throw new InvalidOperationException($"Unable to parse file name {name}");
+            return null;
         }
-
+        
         return splitName[(int)part];
     }
 }
@@ -44,5 +59,6 @@ public class FileNameParser : IFileNameParser
 public interface IFileNameParser
 {
     List<string> GetExistingIds(List<FileInfo> files);
+    string GetDeviceName(FileInfo fileInfo);
     List<string> GetNewNames(FileInfo fileInfo, List<string> ids);
 }

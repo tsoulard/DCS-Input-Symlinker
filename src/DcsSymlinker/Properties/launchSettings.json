@@ -2,7 +2,12 @@
   "profiles": {
     "Local Test": {
       "commandName": "Project",
-      "commandLineArgs": "/home/thomas/Documents/Dev/dcs-symlinker/src/DcsSymlinker/Input/"
+//      "commandLineArgs": "/home/thomas/Documents/Dev/dcs-symlinker/src/DcsSymlinker/Input/ --clean"
+      "commandLineArgs": ""
+    },
+    "Help Test": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
     }
   }
 }
