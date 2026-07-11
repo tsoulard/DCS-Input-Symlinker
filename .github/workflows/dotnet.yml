@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build src/DcsSymlinker.slnx --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test src/DcsSymlinker.Tests/DcsSymlinker.Tests.csproj --no-build --verbosity normal
