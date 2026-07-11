@@ -11,7 +11,12 @@ on:
 
 jobs:
   build:
-
+    strategy:
+      fail-fast: false
+      matrix:
+        sln_path:
+          - src/DcsSymlinker.slnx
+        
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +26,8 @@ jobs:
       with:
         dotnet-version: 10.0
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ matrix.sln_path }}
     - name: Build
-      run: dotnet build src/DcsSymlinker.slnx --no-restore
+      run: dotnet build ${{ matrix.sln_path }} --no-restore
     - name: Test
       run: dotnet test src/DcsSymlinker.Tests/DcsSymlinker.Tests.csproj --no-build --verbosity normal
