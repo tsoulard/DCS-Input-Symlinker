@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DcsSymlinker.Tests/DcsSymlinker.Tests.csproj" />
+  <Project Path="DcsSymlinker/DcsSymlinker.csproj" />
+</Solution>
